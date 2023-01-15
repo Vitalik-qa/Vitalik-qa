@@ -17,41 +17,41 @@ s = "chromedriver.exe"
 options = Options()
 options.add_argument("--disable-notifications")
 driver = webdriver.Chrome(executable_path=s, chrome_options=options)
-# Открываем сайт
+# Открываем окно на весь экран
 driver.get("https://ru.hitmotop.com")
 # Раскрываем вкладку на весь экран
 driver.maximize_window()
-# Проверка
+# Проверка заголовка
 assert "Слушать" in driver.title
 assert "No results found." not in driver.page_source
-# Создаем файл
+# Создаем файл для записи информации о музыке
 f = open("C://Users//Виталий//Desktop//Autotest//ТОП-8 Музыка.txt", "w")
-# Создаем элемент даты
+# Создаем  сегоднешнюю дату
 dt_now = datetime.date.today()
-# Создаем массив
+# Создаем массив для хранение названия песен
 collection = []
-# Записываем в файл
+# Записываем в файл сегоднешнюю дату
 f.write("ТОП-8 Музыка" + str(dt_now) + "\n")
-# Цикл
+# Цикл  for для  записи популярных песен
 for i in range(1, 9):
-    # Находим элемент название песни
+    # Находим элемент Название песни
     name_music = driver.find_element(
         By.XPATH,
         "//*[@id='pjax-container']/div[1]/ul/li[" + str(i) + "]/div[3]/a/div[1]",
     )
-    # Находим элемент имя автора
+    # Находим элемент Имя автора
     author_music = driver.find_element(
         By.XPATH,
         "//*[@id='pjax-container']/div[1]/ul/li[" + str(i) + "]/div[3]/a/div[2]",
     )
-    # Находим элемент продолжительность трека
+    # Находим элемент Продолжительность трека
     time_music = driver.find_element(
         By.XPATH,
         "//*[@id='pjax-container']/div[1]/ul/li[" + str(i) + "]/div[3]/div/div/div[1]",
     )
     # Выводи в консоль
     print(name_music.text, author_music.text, time_music.text)
-    # Запись в файл
+    # Запись  информации о песни в файл
     f.write(
         str(i)
         + ". Название: "
@@ -62,14 +62,14 @@ for i in range(1, 9):
         + time_music.text
         + "\n"
     )
-    # Запись названия песни в массив
+    # Запись названия песен в массив
     collection.append(name_music.text)
 f.close()
-# Вывод массива
+# Выводи массива в консоль
 print(collection)
 # Получаем слуйное название песни
 play_music = random.choice(collection)
-# Находим поисковую строку
+# Находим поисковую строку на сайте по Name
 search = driver.find_element(By.NAME, "q")
 # Вводи в нее выбранное название песни
 search.send_keys(play_music)
@@ -91,5 +91,3 @@ play.click()
 time.sleep(20)
 # Закрываем браузер
 driver.close()
-
-
