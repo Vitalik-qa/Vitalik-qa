@@ -11,12 +11,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 
-class PythonOrgSearch(unittest.TestCase):
 
+class PythonOrgSearch(unittest.TestCase):
     def setUp(self):
         # Подключаем веб браузер
-        s = Service('C:/Users/Виталий/Desktop/Autotest/chromedriver/chromedriver.exe')
-        self.driver = webdriver.Chrome(service=s)
+        s = "chromedriver.exe"
+        self.driver = webdriver.Chrome(executable_path=s)
 
     def test_searchKeys_in_python_org(self):
         driver = self.driver
@@ -34,36 +34,53 @@ class PythonOrgSearch(unittest.TestCase):
         # Нажимаем Enter
         elem.send_keys(Keys.ENTER)
         # Находим элементы с погоддой
-        weather = driver.find_element(By.XPATH, "//*[@id='search-result']/li[1]/div/div[2]/div/div/div[1]")
-        condition_web = driver.find_element(By.XPATH, "//*[@id='search-result']/li[1]/div/div[2]/div/div/div[2]")
+        weather = driver.find_element(
+            By.XPATH, "//*[@id='search-result']/li[1]/div/div[2]/div/div/div[1]"
+        )
+        condition_web = driver.find_element(
+            By.XPATH, "//*[@id='search-result']/li[1]/div/div[2]/div/div/div[2]"
+        )
         # Находим элемент с отображением скрости ветра
-        flesh_web = driver.find_element(By.XPATH, "//*[@id='search-result']/li[1]/div/div[2]/div/div/div[2]/div/div[1]/div[1]")
+        flesh_web = driver.find_element(
+            By.XPATH,
+            "//*[@id='search-result']/li[1]/div/div[2]/div/div/div[2]/div/div[1]/div[1]",
+        )
         # Обрезаем его,до первого символа
-        flesh =flesh_web.text[0]
+        flesh = flesh_web.text[0]
         # Обрезаем состояния погода до скорости ветра
         condition = condition_web.text.partition(flesh)[0]
         # Создаем элемент сегоднешняя дата
         dt_now = datetime.date.today()
         # Открываем файл
-        f = open("C://Users//Виталий//Desktop//Autotest//weather.txt" , "w")
+        f = open("C://Users//Виталий//Desktop//Autotest//weather.txt", "w")
         # Запись погода в файл
-        f.write('Погода сейчаc: ' + weather.text + ' ' + condition.rstrip() + "\n")
+        f.write("Погода сейчаc: " + weather.text + " " + condition.rstrip() + "\n")
         # Вывод погоды в  консоль
-        print('Погода сейчаc:', weather.text, condition.rstrip())
+        print("Погода сейчаc:", weather.text, condition.rstrip())
         # Создаем переменную для увеличение даты погоды
         day_count = 0
         # Цикл для извлечение погоды на 6 дней
-        for i in range (1,7):
+        for i in range(1, 7):
             # Дата на следующего дня
             tomorrow = dt_now + datetime.timedelta(days=day_count)
             # Температура на день
-            day = driver.find_element(By.XPATH, "//*[@id='search-result']/li[1]/div/div[3]/div/div[" + str(i) + "]/div[2]")
+            day = driver.find_element(
+                By.XPATH,
+                "//*[@id='search-result']/li[1]/div/div[3]/div/div["
+                + str(i)
+                + "]/div[2]",
+            )
             # Температура на ночь
-            niht = driver.find_element(By.XPATH, "//*[@id='search-result']/li[1]/div/div[3]/div/div[" + str(i) + "]/div[4]")
+            niht = driver.find_element(
+                By.XPATH,
+                "//*[@id='search-result']/li[1]/div/div[3]/div/div["
+                + str(i)
+                + "]/div[4]",
+            )
             # Запись температуры в файл
-            f.write(str(tomorrow) + ' день:' + day.text + ' ночь:' + niht.text+"\n")
+            f.write(str(tomorrow) + " день:" + day.text + " ночь:" + niht.text + "\n")
             # Вывод температуры в консоль
-            print(tomorrow, 'день:', day.text, 'ночь:', niht.text)
+            print(tomorrow, "день:", day.text, "ночь:", niht.text)
             # Увеличение переменной, следующий день
             day_count += 1
         # Закрываем файл
@@ -71,14 +88,11 @@ class PythonOrgSearch(unittest.TestCase):
         # Делаем и сохраняем скрин с погодой
         driver.save_screenshot("C://Users//Виталий//Desktop//Autotest//weather.png")
 
-
-    def tearDown (self):
+    def tearDown(self):
         # Ожидание 5 сек.
         time.sleep(5)
         # Закрываем браузер
         self.driver.quit()
-
-
 
 
 if __name__ == "__main__":
