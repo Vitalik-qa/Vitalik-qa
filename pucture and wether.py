@@ -21,11 +21,10 @@ from selenium.webdriver.chrome.service import Service
 
 class test_1(unittest.TestCase):
     def test_pucture(self):
-        # Подключаем веб браузер
+        # Подключаем веб-браузер
         s = "chromedriver.exe"
         self.driver = webdriver.Chrome(executable_path=s)
-
-        # Проверка наличия элемента
+        # Функция проверки наличие элемента
         def check(xpath):
             try:
                 driver.find_element_by_xpath(xpath)
@@ -33,34 +32,31 @@ class test_1(unittest.TestCase):
                 return False
             return True
 
-        # Открываем Яндекс
+        # Открытие ссылки
         driver.get("https://yandex.ru/images/")
-
         # Открываем окно на весь экран
         driver.maximize_window()
-
-        # Проверка
+        # Проверка заголовка
         assert "Яндекс" in driver.title
         assert "No results found." not in driver.page_source
-        print("\n")
+        # Создаем массив для записи названия тем картинок
         arr = []
+        # Цикл  for  для получение названий тем картинок
         for i in range(1, 5):
-            # // *[ @class = 'PopularRequestList'] / div[2]
             images = driver.find_element(
                 By.XPATH, "//*[@class ='PopularRequestList']/div[" + str(i) + "]"
             )
-            print(i)
-            print(images.text)
             arr.append(images.text)
-        # Выбираем тему картин
+        # Выбираем рандомную тему
         images_click = driver.find_element(
             By.XPATH,
             "//*[@class ='PopularRequestList']/div[" + str(random.randint(1, 4)) + "]",
         )
         images_click.click()
 
-        # Выбираем картинку
+        # Ожидаем появление картинки 20 сек.
         driver.implicitly_wait(20)
+        # Выбираем картинку
         elem = driver.find_element(
             By.XPATH,
             "//*[@class = 'serp-list serp-list_type_search serp-list_unique_yes serp-list_rum_yes serp-list_justifier_yes serp-controller__list counter__reqid clearfix i-bem serp-list_js_inited']/div["
@@ -87,18 +83,18 @@ class test_1(unittest.TestCase):
         self.driver.quit()
 
     def test_wether(self):
-        # Подключаем веб браузер
+        # Подключаем веб-браузер
         s = Service("C:/Users/Виталий/Desktop/Autotest/chromedriver/chromedriver.exe")
         self.driver = webdriver.Chrome(service=s)
         driver = self.driver
-        # Открываем Яндекс
+        # Открываем ссылку
         driver.get("https://yandex.ru/")
         # Открываем окно на весь экран
         driver.maximize_window()
-        # Проверка
+        # Проверка заголовка
         assert "Яндекс" in driver.title
         assert "No results found." not in driver.page_source
-        # Находим Поисковую строку
+        # Находим Поисковую строку по Id
         elem = driver.find_element(By.ID, "text")
         # Вводим слово в поисковую строку
         elem.send_keys("Погода")
@@ -131,7 +127,7 @@ class test_1(unittest.TestCase):
         print("Погода сейчаc:", weather.text, condition.rstrip())
         # Создаем переменную для увеличение даты погоды
         day_count = 0
-        # Цикл для извлечение погоды на 6 дней
+        # Цикл for для получения  погоды на 6 дней
         for i in range(1, 7):
             # Дата на следующего дня
             tomorrow = dt_now + datetime.timedelta(days=day_count)
