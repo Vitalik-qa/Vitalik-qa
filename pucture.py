@@ -31,31 +31,27 @@ s = "chromedriver.exe"
 driver = webdriver.Chrome(executable_path=s)
 # Открываем Яндекс
 driver.get("https://yandex.ru/images/")
-
 # Открываем окно на весь экран
 driver.maximize_window()
-
-# Проверка
+# Проверка заголовка
 assert "Яндекс" in driver.title
 assert "No results found." not in driver.page_source
-
+# Создаем массив для записи названия тем картинок
 arr = []
+# Цикл  for  для получение названий тем картинок
 for i in range(1, 5):
-    # // *[ @class = 'PopularRequestList'] / div[2]
     images = driver.find_element(
         By.XPATH, "//*[@class ='PopularRequestList']/div[" + str(i) + "]"
     )
-    print(i)
-    print(images.text)
     arr.append(images.text)
-# Выбираем тему картин
+# Выбираем рандомную тему
 images_click = driver.find_element(
     By.XPATH, "//*[@class ='PopularRequestList']/div[" + str(random.randint(1, 4)) + "]"
 )
 images_click.click()
-
-# Выбираем картинку
+# Ожидаем появление картинки 20 сек.
 driver.implicitly_wait(20)
+# Выбираем картинку
 elem = driver.find_element(
     By.XPATH,
     "//*[@class = 'serp-list serp-list_type_search serp-list_unique_yes serp-list_rum_yes serp-list_justifier_yes serp-controller__list counter__reqid clearfix i-bem serp-list_js_inited']/div["
@@ -71,12 +67,9 @@ open = driver.find_element(
 )
 link = open.get_attribute("href")
 print(link)
-
 # Скачиваем изображение
 urllib.request.urlretrieve(link, "C://Users//Виталий//Desktop//Autotest//python.png")
-
 # Ждем 20 сек
 time.sleep(20)
-
 # Закрываем браузер
 driver.close()
