@@ -14,17 +14,17 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class PythonOrgSearch(unittest.TestCase):
     def setUp(self):
-        # Подключаем веб браузер
+        # Подключаем веб-браузер
         s = "chromedriver.exe"
         self.driver = webdriver.Chrome(executable_path=s)
 
     def test_searchKeys_in_python_org(self):
         driver = self.driver
-        # Открываем Яндекс
+        # Открываем ссылку
         driver.get("https://yandex.ru/")
         # Открываем окно на весь экран
         driver.maximize_window()
-        # Проверка
+        # Проверка заголовка
         assert "Яндекс" in driver.title
         assert "No results found." not in driver.page_source
         # Находим Поисковую строку
@@ -49,7 +49,7 @@ class PythonOrgSearch(unittest.TestCase):
         flesh = flesh_web.text[0]
         # Обрезаем состояния погода до скорости ветра
         condition = condition_web.text.partition(flesh)[0]
-        # Создаем элемент сегоднешняя дата
+        # Создаем  сегоднешнюю дата
         dt_now = datetime.date.today()
         # Открываем файл
         f = open("C://Users//Виталий//Desktop//Autotest//weather.txt", "w")
@@ -59,9 +59,9 @@ class PythonOrgSearch(unittest.TestCase):
         print("Погода сейчаc:", weather.text, condition.rstrip())
         # Создаем переменную для увеличение даты погоды
         day_count = 0
-        # Цикл для извлечение погоды на 6 дней
+        # Цикл  for для извлечение погоды на 6 дней
         for i in range(1, 7):
-            # Дата на следующего дня
+            # Дата  следующего дня
             tomorrow = dt_now + datetime.timedelta(days=day_count)
             # Температура на день
             day = driver.find_element(
@@ -81,7 +81,7 @@ class PythonOrgSearch(unittest.TestCase):
             f.write(str(tomorrow) + " день:" + day.text + " ночь:" + niht.text + "\n")
             # Вывод температуры в консоль
             print(tomorrow, "день:", day.text, "ночь:", niht.text)
-            # Увеличение переменной, следующий день
+            # Увеличение переменной,чтобы перейти на следующий день
             day_count += 1
         # Закрываем файл
         f.close()
