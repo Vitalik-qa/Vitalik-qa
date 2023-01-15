@@ -22,36 +22,36 @@ def check(xpath):
     return True
 
 
-# Подключаем веб браузер
+# Подключаем веб-браузер
 s = "chromedriver.exe"
 driver = webdriver.Chrome(executable_path=s)
-# Открываем сайт с Расписанием
+# Открываем ссылку
 driver.get("https://pass.rzd.ru/")
 # Открываем окно на весь экран
 driver.maximize_window()
-# Проверка
+# Проверка заголовка
 assert "Пассажирам" in driver.title
 assert "No results found." not in driver.page_source
 # Находим поля для поиска маршрута: Место отправки
 from_place = driver.find_element(By.ID, "name0")
 from_place.send_keys("Москва")
 from_place.send_keys(Keys.ENTER)
-
-# Место прибытия
+# Находим поля для поиска маршрута: Место прибытия
 to_place = driver.find_element(By.ID, "name1")
 to_place.send_keys("Ростов-на-Дону")
 to_place.send_keys(Keys.ENTER)
-# Время отправки
+# Находим поля для поиска маршрута: Время отправки
 from_time = driver.find_element(By.ID, "date0")
 # Создание даты
 dt_now = datetime.date.today()
-# Изменение дата
+# Изменение дата  + 1 день
 tomorrow = dt_now + datetime.timedelta(days=1)
-# Ввод даты
+# Очистка старой даты
 from_time.send_keys(Keys.CONTROL + "a")
 from_time.send_keys(Keys.DELETE)
+# Ввод даты на завтра
 from_time.send_keys(tomorrow.strftime("%d.%m.%Y"))
-# Поиск
+# Нажатие кнопки Поиск
 search = driver.find_element(By.ID, "Submit")
 search.send_keys(Keys.ENTER)
 # Ожидание появления поездов
@@ -62,9 +62,9 @@ element = wait.until(EC.element_to_be_clickable((By.XPATH, train_xpath)))
 price = 100000
 j = 1
 i = 1
-# Цикл проверки наличия следующего поезда по порядку
+# Цикл while для проверки наличия следующего поезда по порядку
 while check(train_xpath):
-    # Изменения переменных для проверки наличия веб элемента на страницы
+    # Изменения переменных для проверки наличия элемента на страницы
     price_xpath = (
         "//*[@id='Page0']/div/div[2]/div[1]/div[3]/div["
         + str(j)
@@ -73,7 +73,7 @@ while check(train_xpath):
         + "]/div/div[3]/span[2]"
     )
     train_xpath = "//*[@id='Page0']/div/div[2]/div[1]/div[3]/div[" + str(j) + "]"
-    # Цикл проверки цены
+    # Цикл while для проверки наличие цены
     while check(price_xpath):
         # Поиск минимальной цены
         print(driver.find_element(By.XPATH, price_xpath).text)
@@ -87,7 +87,7 @@ while check(train_xpath):
                 + str(j)
                 + "]/div/div/div[1]/div[1]/div[2]/span[2]",
             ).text
-            # Тип вагона
+            # Сохранения переменных: Тип вагона
             ticket = driver.find_element(
                 By.XPATH,
                 "//*[@id='Page0']/div/div[2]/div[1]/div[3]/div["
@@ -96,7 +96,7 @@ while check(train_xpath):
                 + str(i)
                 + "]/div/div[2]/span",
             ).text
-            # Цена
+            # Сохранения переменных: Цена
             price = driver.find_element(
                 By.XPATH,
                 "//*[@id='Page0']/div/div[2]/div[1]/div[3]/div["
@@ -105,7 +105,7 @@ while check(train_xpath):
                 + str(i)
                 + "]/div/div[3]/span[2]",
             ).text
-            # Убираем пробел и преобразуем в int
+            # Убираем пробел в переменной с ценой и преобразуем в int
             price = int(price.replace(" ", ""))
         # Переходим на следующую цену
         i += 1
@@ -117,10 +117,10 @@ while check(train_xpath):
             + str(i)
             + "]/div/div[3]/span[2]"
         )
-    # Изменяем и обновляем переменные для изменения адресов веб элементов
+    # Изменяем и обновляем переменные для изменения адресов веб элементов, чтобы проверить наличие еще маршрутов
     j += 1
     i = 1
-# Вывод
+# Вывод информациив  консоль
 print(
     "Минимальная цена покупки билета на сайте РЖД у ФПК:",
     price,
