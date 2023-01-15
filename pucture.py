@@ -25,10 +25,10 @@ def check(xpath):
         return False
     return True
 
-# Подключаем веб браузер
 
-s = Service('C:/Users/Виталий/Desktop/Autotest/chromedriver/chromedriver.exe')
-driver = webdriver.Chrome(service=s)
+# Подключаем веб браузер
+s = "chromedriver.exe"
+driver = webdriver.Chrome(executable_path=s)
 # Открываем Яндекс
 driver.get("https://yandex.ru/images/")
 
@@ -40,31 +40,43 @@ assert "Яндекс" in driver.title
 assert "No results found." not in driver.page_source
 
 arr = []
-for i in range(1,5):
-    #// *[ @class = 'PopularRequestList'] / div[2]
-    images = driver.find_element(By.XPATH, "//*[@class ='PopularRequestList']/div["+str(i)+"]")
+for i in range(1, 5):
+    # // *[ @class = 'PopularRequestList'] / div[2]
+    images = driver.find_element(
+        By.XPATH, "//*[@class ='PopularRequestList']/div[" + str(i) + "]"
+    )
     print(i)
     print(images.text)
     arr.append(images.text)
 # Выбираем тему картин
-images_click = driver.find_element(By.XPATH, "//*[@class ='PopularRequestList']/div["+str(random.randint(1, 4))+"]")
+images_click = driver.find_element(
+    By.XPATH, "//*[@class ='PopularRequestList']/div[" + str(random.randint(1, 4)) + "]"
+)
 images_click.click()
 
 # Выбираем картинку
 driver.implicitly_wait(20)
-elem = driver.find_element(By.XPATH,"//*[@class = 'serp-list serp-list_type_search serp-list_unique_yes serp-list_rum_yes serp-list_justifier_yes serp-controller__list counter__reqid clearfix i-bem serp-list_js_inited']/div["+str(random.randint(1, 50))+"]")
+elem = driver.find_element(
+    By.XPATH,
+    "//*[@class = 'serp-list serp-list_type_search serp-list_unique_yes serp-list_rum_yes serp-list_justifier_yes serp-controller__list counter__reqid clearfix i-bem serp-list_js_inited']/div["
+    + str(random.randint(1, 50))
+    + "]",
+)
 elem.click()
 
 # Получаем ссылку на изображение
-open = driver.find_element(By.XPATH,"//*[@class = 'MMButton MMButton_type_link MMViewerButtons-OpenImage MMViewerButtons-OpenImage_isOtherSizesEnabled MMViewerButtons-OpenImage_theme_primary']")
-link = open.get_attribute('href')
+open = driver.find_element(
+    By.XPATH,
+    "//*[@class = 'MMButton MMButton_type_link MMViewerButtons-OpenImage MMViewerButtons-OpenImage_isOtherSizesEnabled MMViewerButtons-OpenImage_theme_primary']",
+)
+link = open.get_attribute("href")
 print(link)
 
 # Скачиваем изображение
 urllib.request.urlretrieve(link, "C://Users//Виталий//Desktop//Autotest//python.png")
 
-#Ждем 20 сек
+# Ждем 20 сек
 time.sleep(20)
 
-#Закрываем браузер
+# Закрываем браузер
 driver.close()
