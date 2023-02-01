@@ -1,0 +1,21 @@
+
+В Windows PowerShell:
+	
+	Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+	irm get.scoop.sh | iex
+
+После установки Scope:
+	scoop install allure
+	
+
+В PyCharm для установки:
+	selenium
+	pytest
+	allure-pytest
+	allur-python-commons-test
+
+В PyCharm для запуска теста:
+	--alluredir results
+
+В командной старке в папке с тестами:
+	allure serve results
